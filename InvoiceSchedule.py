@@ -16,7 +16,7 @@ No_Of_Days = Order_Term_End_Date.day - Order_Term_Start_Date.day
 
 if No_Of_Days < 0:
     globals()['No_Of_Months'] = globals()['No_Of_Months'] - 1
-    globals()['No_Of_Days'] = Order_Term_End_Date.day
+    globals()['No_Of_Days'] = Order_Term_End_Date.day + 30 - Order_Term_Start_Date.day
 
 Total_No_Of_Months = No_Of_Years * 12 + No_Of_Months
 

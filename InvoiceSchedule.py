@@ -12,7 +12,12 @@ if No_Of_Months < 0:
     globals()['No_Of_Years'] -= 1
     globals()['No_Of_Months'] = 12 - abs(No_Of_Months)
 
-No_Of_Days = abs(Order_Term_End_Date.day - Order_Term_Start_Date.day)
+No_Of_Days = Order_Term_End_Date.day - Order_Term_Start_Date.day
+
+if No_Of_Days < 0:
+    globals()['No_Of_Months'] = globals()['No_Of_Months'] - 1
+    globals()['No_Of_Days'] = Order_Term_End_Date.day
+
 Total_No_Of_Months = No_Of_Years * 12 + No_Of_Months
 
 Invoice_Date = Order_Term_Start_Date

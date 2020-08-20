@@ -6,7 +6,12 @@ Order_Term_End_Date_String = Quote.GetCustomField('Order Term End Date').Content
 Order_Term_End_Date = datetime.strptime(Order_Term_End_Date_String, '%d/%m/%y').date()
 
 No_Of_Years = (Order_Term_End_Date.year - Order_Term_Start_Date.year)
-No_Of_Months = abs(Order_Term_End_Date.month - Order_Term_Start_Date.month)
+No_Of_Months = Order_Term_End_Date.month - Order_Term_Start_Date.month
+
+if No_Of_Months < 0:
+    globals()['No_Of_Years'] -= 1
+    globals()['No_Of_Months'] = 12 - abs(No_Of_Months)
+
 No_Of_Days = abs(Order_Term_End_Date.day - Order_Term_Start_Date.day)
 Total_No_Of_Months = No_Of_Years * 12 + No_Of_Months
 
@@ -51,9 +56,9 @@ if Total_Amounts['Subscriptions'] > 0:
         invRow = quoteTable.AddNewRow()
         invRow['Invoice_Schedule'] = Invoice_Schedule
         invRow['Invoice_Date'] = "Upon Signature"
-        invRow['Amount'] = Total_Amounts['Subscriptions'] / No_Of_Years
+        invRow['Amount'] = (Total_Amounts['Subscriptions'] / Total_No_Of_Months) * No_Of_Months
         invRow['Estimated_Tax'] = 0
-        invRow['Grand_Total'] = Total_Amounts['Subscriptions'] / No_Of_Years
+        invRow['Grand_Total'] = (Total_Amounts['Subscriptions'] / Total_No_Of_Months) * No_Of_Months
 
     for count in range(No_Of_Years):
         invRow = quoteTable.AddNewRow()
@@ -63,8 +68,8 @@ if Total_Amounts['Subscriptions'] > 0:
         else:
             Invoice_Date = Invoice_Date + timedelta(days=365)
             invRow['Invoice_Date'] = Invoice_Date.strftime("%B %d,%Y").ToString()
-        invRow['Amount'] = Total_Amounts['Subscriptions'] / No_Of_Years
+        invRow['Amount'] = (Total_Amounts['Subscriptions'] / Total_No_Of_Months) * 12
         invRow['Estimated_Tax'] = 0
-        invRow['Grand_Total'] = Total_Amounts['Subscriptions'] / No_Of_Years
+        invRow['Grand_Total'] = (Total_Amounts['Subscriptions'] / Total_No_Of_Months) * 12
 
 quoteTable.Save()
